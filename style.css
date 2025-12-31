@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;500&display=swap');
+
+body {
+    margin: 0; padding: 0; height: 100vh;
+    background: #000; overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+/* Dark Red Gradient Background */
+.bg-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #4b0000 0%, #000 100%);
+    z-index: -1;
+}
+
+.glass-box {
+    background: rgba(20, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 30px; border-radius: 35px;
+    width: 300px; text-align: center;
+    box-shadow: 0 0 50px rgba(75, 0, 0, 0.8);
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.premium-text {
+    font-family: 'Cinzel', serif;
+    color: #D4AF37;
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    margin-bottom: 20px;
+}
+
+.gold-glow-btn {
+    background: linear-gradient(45deg, #8B0000, #D4AF37);
+    border: none; padding: 12px 25px; border-radius: 50px;
+    font-weight: bold; cursor: pointer; color: white;
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.gold-glow-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px #D4AF37; }
+
+#photo-canvas { width: 100vw; height: 100vh; position: relative; }
+
+.scatter-photo {
+    position: absolute; width: 80px; height: 100px; /* Thoda chota kiya taaki 50 photos fit aayein */
+    background: white; padding: 4px; border-radius: 3px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.7);
+    transition: 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    opacity: 0;
+}
+
+.scatter-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.note-text {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px; border-radius: 15px; border-left: 4px solid #8B0000;
+    text-align: left; font-size: 0.9rem; line-height: 1.5;
+}
+
+.bottom-controls { position: absolute; bottom: 40px; width: 100%; text-align: center; }
+.screen { display: none; }
+.screen.active { display: block; }
+.video-wrapper { border-radius: 15px; overflow: hidden; border: 2px solid #8B0000; }
