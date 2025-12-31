@@ -1,67 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@300;500&display=swap');
+function showPhotos() {
+    nextScreen('memories');
+    confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 }, colors: ['#D4AF37', '#8B0000', '#ffffff'] });
 
-body {
-    margin: 0; padding: 0; height: 100vh;
-    background: #000; overflow: hidden;
-    font-family: 'Poppins', sans-serif;
-    color: white;
+    const canvas = document.getElementById('photo-canvas');
+    canvas.innerHTML = ''; 
+
+    for (let i = 1; i <= 50; i++) {
+        const imgDiv = document.createElement('div');
+        imgDiv.className = 'scatter-photo';
+        imgDiv.innerHTML = `<img src="img${i}.jpg" draggable="false" style="width:100%; height:100%; object-fit:cover;">`;
+        
+        imgDiv.style.left = "50%";
+        imgDiv.style.top = "50%";
+        
+        // Dragging Logic
+        makeElementDraggable(imgDiv);
+
+        canvas.appendChild(imgDiv);
+
+        setTimeout(() => {
+            const randomX = Math.random() * 80 + 10; 
+            const randomY = Math.random() * 60 + 15; 
+            const randomRot = Math.random() * 60 - 30; 
+            imgDiv.style.left = `${randomX}%`;
+            imgDiv.style.top = `${randomY}%`;
+            imgDiv.style.transform = `translate(-50%, -50%) rotate(${randomRot}deg) scale(1)`;
+            imgDiv.style.opacity = "1";
+        }, i * 40);
+    }
 }
 
-/* Dark Red Gradient Background */
-.bg-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle at center, #4b0000 0%, #000 100%);
-    z-index: -1;
+function makeElementDraggable(el) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    el.onmousedown = dragMouseDown;
+    el.ontouchstart = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+        // Mouse ya Touch position lena
+        if (e.type === 'touchstart') {
+            pos3 = e.touches[0].clientX;
+            pos4 = e.touches[0].clientY;
+        } else {
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+        }
+        document.onmouseup = closeDragElement;
+        document.ontouchend = closeDragElement;
+        document.onmousemove = elementDrag;
+        document.ontouchmove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        let clientX, clientY;
+        if (e.type === 'touchmove') {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+        pos1 = pos3 - clientX;
+        pos2 = pos4 - clientY;
+        pos3 = clientX;
+        pos4 = clientY;
+        el.style.top = (el.offsetTop - pos2) + "px";
+        el.style.left = (el.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.ontouchend = null;
+        document.ontouchmove = null;
+    }
 }
 
-.glass-box {
-    background: rgba(20, 0, 0, 0.6);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    padding: 30px; border-radius: 35px;
-    width: 300px; text-align: center;
-    box-shadow: 0 0 50px rgba(75, 0, 0, 0.8);
-    position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.premium-text {
-    font-family: 'Cinzel', serif;
-    color: #D4AF37;
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
-    margin-bottom: 20px;
-}
-
-.gold-glow-btn {
-    background: linear-gradient(45deg, #8B0000, #D4AF37);
-    border: none; padding: 12px 25px; border-radius: 50px;
-    font-weight: bold; cursor: pointer; color: white;
-    box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
-    margin-top: 15px;
-    transition: 0.3s;
-}
-
-.gold-glow-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px #D4AF37; }
-
-#photo-canvas { width: 100vw; height: 100vh; position: relative; }
-
-.scatter-photo {
-    position: absolute; width: 80px; height: 100px; /* Thoda chota kiya taaki 50 photos fit aayein */
-    background: white; padding: 4px; border-radius: 3px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.7);
-    transition: 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    opacity: 0;
-}
-
-.scatter-photo img { width: 100%; height: 100%; object-fit: cover; }
-
-.note-text {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px; border-radius: 15px; border-left: 4px solid #8B0000;
-    text-align: left; font-size: 0.9rem; line-height: 1.5;
-}
-
-.bottom-controls { position: absolute; bottom: 40px; width: 100%; text-align: center; }
-.screen { display: none; }
-.screen.active { display: block; }
-.video-wrapper { border-radius: 15px; overflow: hidden; border: 2px solid #8B0000; }
